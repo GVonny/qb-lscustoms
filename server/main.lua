@@ -1,19 +1,23 @@
 QBCore = exports['qb-core']:GetCoreObject()
 
-QBCore.Functions.CreateCallback('lscustoms:can-purchase', function(source, cb, price)
+QBCore.Functions.CreateCallback('lscustoms:can-purchase', function(source, cb, price, admin)
     local src = source
     local player = QBCore.Functions.GetPlayer(src)
 
-    if player.Functions.GetMoney('bank') >= price then
-        player.Functions.RemoveMoney('bank', price)
-
-        cb(true)
-    elseif player.Functions.GetMoney('cash') >= price then
-        player.Functions.RemoveMoney('cash', price)
-
+    if admin then
         cb(true)
     else
-        cb(false)
+        if player.Functions.GetMoney('bank') >= price then
+            player.Functions.RemoveMoney('bank', price)
+
+            cb(true)
+        elseif player.Functions.GetMoney('cash') >= price then
+            player.Functions.RemoveMoney('cash', price)
+
+            cb(true)
+        else
+            cb(false)
+        end
     end
 end)
 

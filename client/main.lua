@@ -3,7 +3,7 @@ QBCore = exports['qb-core']:GetCoreObject()
 Config.Menu = NativeUI.CreatePool()
 
 RegisterCommand('lscustoms', function() 
-    TriggerEvent('lscustoms:open-menu', false)  
+    TriggerEvent('lscustoms:open-menu', true)  
 end)
 
 RegisterNetEvent('lscustoms:open-menu', function(admin)
@@ -42,7 +42,11 @@ RegisterNetEvent('lscustoms:open-menu', function(admin)
         
             Config.InMenu = true
             FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+
+            local fuel = GetVehicleFuelLevel(Config.Vehicle.Vehicle)
             SetVehicleFixed(Config.Vehicle.Vehicle)
+            Wait(100)
+            SetVehicleFuelLevel(Config.Vehicle.Vehicle, fuel)
         else 
             if not owned then
                 QBCore.Functions.Notify("This vehicle is not owned", "error")
@@ -93,7 +97,11 @@ RegisterNetEvent('lscustoms:open-mods', function(admin)
         
             Config.InMenu = true
             FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+
+            local fuel = GetVehicleFuelLevel(Config.Vehicle.Vehicle)
             SetVehicleFixed(Config.Vehicle.Vehicle)
+            Wait(100)
+            SetVehicleFuelLevel(Config.Vehicle.Vehicle, fuel)
         else 
             if not owned then
                 QBCore.Functions.Notify("This vehicle is not owned", "error")
@@ -143,7 +151,11 @@ RegisterNetEvent('lscustoms:open-wheels', function(admin)
 
             Config.InMenu = true
             FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+
+            local fuel = GetVehicleFuelLevel(Config.Vehicle.Vehicle)
             SetVehicleFixed(Config.Vehicle.Vehicle)
+            Wait(100)
+            SetVehicleFuelLevel(Config.Vehicle.Vehicle, fuel)
         else 
             if not owned then
                 QBCore.Functions.Notify("This vehicle is not owned", "error")
@@ -193,7 +205,11 @@ RegisterNetEvent('lscustoms:open-respray', function(admin)
 
             Config.InMenu = true
             FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+
+            local fuel = GetVehicleFuelLevel(Config.Vehicle.Vehicle)
             SetVehicleFixed(Config.Vehicle.Vehicle)
+            Wait(100)
+            SetVehicleFuelLevel(Config.Vehicle.Vehicle, fuel)
         else 
             if not owned then
                 QBCore.Functions.Notify("This vehicle is not owned", "error")
@@ -355,7 +371,7 @@ function LoadPaintTypes(menu)
                                     Config.Vehicle.ChangedMod = true
                                 end
                             end
-                        end, item.Price)
+                        end, item.Price, Config.AdminMode)
                     end
 
                     Config.Categories[num][category].OnMenuChanged = function(menu, newmenu, forward)
@@ -782,7 +798,7 @@ function OpenModMenu()
                             end
                         end
                     end
-                end, Config.Vehicle.Mods.modList[category][index].price)
+                end, Config.Vehicle.Mods.modList[category][index].price, Config.AdminMode)
                 
             end
 
