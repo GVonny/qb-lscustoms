@@ -27,14 +27,14 @@ There are four different variations of menus (everything/mods only/wheels only/r
 Note: Each event takes in a boolean parameter (admin)
 - When in admin mode it will not charge the player for mod applications
 - When in admin mode it will override the Config.Debug value to always print debug messages in the console
-- When in admin mode when you select a category or mod it it will print to the console the details of that category
+- When in admin mode when you select a category or mod it it will print to the console the details of that category or mod
   - `{model}` `{category number}`: `{mod index}` `{mod label key}` `{carcols category}`
 
 ## Configs
 **init.lua** - _The starting variables for the script_
 ---
 Config.Debug: defines whether or not to print the mod details in the console when cycling through each option
-- With Config.Debug enabled when you select a category or mod it it will print to the console the details of that category
+- With Config.Debug enabled when you select a category or mod it it will print to the console the details of that category or mod
   - `{model}` `{category number}`: `{mod index}` `{mod label key}` `{carcols category}`
 
 Config.AllowBlacklised: defines whether or not to allow all blacklisted mods in blacklist.lua to show in the listing
