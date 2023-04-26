@@ -30,7 +30,6 @@ QBCore.Functions.CreateCallback('lscustoms:is-vehicle-owned', function(source, c
 end)
 
 RegisterNetEvent('lscustoms:update-mods', function(plate, props)
-    print("updating")
     MySQL.Sync.execute("UPDATE player_vehicles SET mods = @mods WHERE plate = @plate", {
         ['@plate'] = plate,
         ['@mods'] = json.encode(props)
