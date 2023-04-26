@@ -1,4 +1,4 @@
-# QB LS Customs
+# qb-lscustoms
 _Developed by GVONNY_
 
 This menu is designed to be completely configurable of which includes:
