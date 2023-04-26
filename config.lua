@@ -9,12 +9,17 @@ Config.CommaValue = function(amount)
     return formatted
 end
 
+Config.Trim = function(value)
+    if not value then return nil end
+    return (string.gsub(value, '^%s*(.-)%s*$', '%1'))
+end
+
 Config.PairsByKeys = function(t, f)
     local a = {}
     for n in pairs(t) do table.insert(a, n) end
     table.sort(a, f)
-    local i = 0      -- iterator variable
-    local iter = function ()   -- iterator function
+    local i = 0
+    local iter = function ()
         i = i + 1
         if a[i] == nil then return nil
         else return a[i], t[a[i]]
@@ -594,7 +599,7 @@ Config.GetModLabelName = function(vehicle, model, type, index)
     local label = GetModTextLabel(vehicle, type, index)
 
     if Config.CustomLabels[model] and Config.CustomLabels[model][label] then
-        label = AORP.Functions.Trim(Config.CustomLabels[model][label])
+        label = Config.Trim(Config.CustomLabels[model][label])
     else
         label = GetLabelText(GetModTextLabel(vehicle, type, index))
     end
@@ -620,6 +625,12 @@ end
 
 Config.BlacklistAll = function(model, x)
     return Config.BlacklistedMods[model] and Config.BlacklistedMods[model][x] and Config.TableLength(Config.BlacklistedMods[model][x]) == 0
+end
+
+Config.CanPurchase = function(price)
+    QBCore.Functions.TriggerCallback('lscustoms:can-purchase', function(bool)
+        return bool
+    end, price)
 end
 
 Config.Colors = {

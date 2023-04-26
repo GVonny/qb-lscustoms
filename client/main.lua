@@ -3,51 +3,56 @@ QBCore = exports['qb-core']:GetCoreObject()
 Config.Menu = NativeUI.CreatePool()
 
 RegisterCommand('lscustoms', function() 
-    TriggerEvent('lscustoms:open-menu', true)  
+    TriggerEvent('lscustoms:open-menu', false)  
 end)
 
 RegisterNetEvent('lscustoms:open-menu', function(admin)
     Config.AdminMode = admin or false
+    local player = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(player)
+    local plate = QBCore.Functions.GetPlate(vehicle)
 
-    if IsPedInAnyVehicle(PlayerPedId()) --[[and (admin or player owned check)]] then
-        Config.Vehicle.Vehicle = GetVehiclePedIsIn(PlayerPedId())
-        Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
-        Config.Categories = {}
+    QBCore.Functions.TriggerCallback('lscustoms:is-vehicle-owned', function(owned)
+        if IsPedInAnyVehicle(player) and (admin or owned) then
+            Config.Vehicle.Vehicle = GetVehiclePedIsIn(player)
+            Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
+            Config.Categories = {}
 
-        Config.Menu:Remove()
-    
-        if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-            Config.ModMenu:Visible(false)
-            return
-        end
+            Config.Menu:Remove()
         
-        OpenModMenu()
-        OpenWheelMenu()
-        OpenResprayMenu()
-
-        Config.Menu:RefreshIndex()
-        Config.Menu:MouseControlsEnabled(false);
-        Config.Menu:MouseEdgeEnabled(false);
-        Config.Menu:ControlDisablingEnabled(false);
-    
-        Config.ModMenu:Visible(not Config.ModMenu:Visible())
-
-        Config.ModMenu.OnMenuClosed = function(menu)
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+                return
+            end
             
-        end
-    
-        Config.InMenu = true
-        FreezeEntityPosition(Config.Vehicle.Vehicle, true)
-        SetVehicleFixed(Config.Vehicle.Vehicle)
-    else 
-        --[[ if not AORP.Functions.DoesPlayerOwnVehicle(AORP.Functions.GetPlate(GetVehiclePedIsIn(PlayerPedId()))) then
-            AORP.Functions.Notify("You do not own this vehicle", "error")
-        end ]]
+            OpenModMenu()
+            OpenWheelMenu()
+            OpenResprayMenu()
 
-		if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-			Config.ModMenu:Visible(false)
-		end
-	end 
+            Config.Menu:RefreshIndex()
+            Config.Menu:MouseControlsEnabled(false);
+            Config.Menu:MouseEdgeEnabled(false);
+            Config.Menu:ControlDisablingEnabled(false);
+        
+            Config.ModMenu:Visible(not Config.ModMenu:Visible())
+
+            Config.ModMenu.OnMenuClosed = function(menu)
+                UpdateVehicleMods(plate, QBCore.Functions.GetVehicleProperties(Config.Vehicle.Vehicle))
+            end
+        
+            Config.InMenu = true
+            FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+            SetVehicleFixed(Config.Vehicle.Vehicle)
+        else 
+            if not owned then
+                QBCore.Functions.Notify("This vehicle is not owned", "error")
+            end
+
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+            end
+        end 
+    end, plate)
 end)
 
 RegisterCommand('mods', function() 
@@ -56,44 +61,49 @@ end)
 
 RegisterNetEvent('lscustoms:open-mods', function(admin)
     Config.AdminMode = admin or false
+    local player = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(player)
+    local plate = QBCore.Functions.GetPlate(vehicle)
 
-    if IsPedInAnyVehicle(PlayerPedId()) --[[and (admin or player owned check)]] then
-        Config.Vehicle.Vehicle = GetVehiclePedIsIn(PlayerPedId())
-        Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
-        Config.Categories = {}
+    QBCore.Functions.TriggerCallback('lscustoms:is-vehicle-owned', function(owned)
+        if IsPedInAnyVehicle(player) and (admin or owned) then
+            Config.Vehicle.Vehicle = GetVehiclePedIsIn(player)
+            Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
+            Config.Categories = {}
 
-        Config.Menu:Remove()
-    
-        if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-            Config.ModMenu:Visible(false)
-            return
-        end
+            Config.Menu:Remove()
         
-        OpenModMenu()
-
-        Config.Menu:RefreshIndex()
-        Config.Menu:MouseControlsEnabled(false);
-        Config.Menu:MouseEdgeEnabled(false);
-        Config.Menu:ControlDisablingEnabled(false);
-    
-        Config.ModMenu:Visible(not Config.ModMenu:Visible())
-
-        Config.ModMenu.OnMenuClosed = function(menu)
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+                return
+            end
             
-        end
-    
-        Config.InMenu = true
-        FreezeEntityPosition(Config.Vehicle.Vehicle, true)
-        SetVehicleFixed(Config.Vehicle.Vehicle)
-    else 
-        --[[ if not AORP.Functions.DoesPlayerOwnVehicle(AORP.Functions.GetPlate(GetVehiclePedIsIn(PlayerPedId()))) then
-            AORP.Functions.Notify("You do not own this vehicle", "error")
-        end ]]
+            OpenModMenu()
 
-		if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-			Config.ModMenu:Visible(false)
-		end
-	end 
+            Config.Menu:RefreshIndex()
+            Config.Menu:MouseControlsEnabled(false);
+            Config.Menu:MouseEdgeEnabled(false);
+            Config.Menu:ControlDisablingEnabled(false);
+        
+            Config.ModMenu:Visible(not Config.ModMenu:Visible())
+
+            Config.ModMenu.OnMenuClosed = function(menu)
+                UpdateVehicleMods(plate, QBCore.Functions.GetVehicleProperties(Config.Vehicle.Vehicle))
+            end
+        
+            Config.InMenu = true
+            FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+            SetVehicleFixed(Config.Vehicle.Vehicle)
+        else 
+            if not owned then
+                QBCore.Functions.Notify("This vehicle is not owned", "error")
+            end
+
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+            end
+        end
+    end, plate)
 end)
 
 RegisterCommand('wheels', function()
@@ -102,43 +112,48 @@ end)
 
 RegisterNetEvent('lscustoms:open-wheels', function(admin)
     Config.AdminMode = admin or false
+    local player = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(player)
+    local plate = QBCore.Functions.GetPlate(vehicle)
 
-    if IsPedInAnyVehicle(PlayerPedId()) --[[and (admin or player owned check)]] then
-        Config.Vehicle.Vehicle = GetVehiclePedIsIn(PlayerPedId())
-        Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
+    QBCore.Functions.TriggerCallback('lscustoms:is-vehicle-owned', function(owned)
+        if IsPedInAnyVehicle(player) and (admin or Config.IsVehicleOwned(plate)) then
+            Config.Vehicle.Vehicle = GetVehiclePedIsIn(player)
+            Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
 
-        Config.Menu:Remove()
-    
-        if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-            Config.ModMenu:Visible(false)
-            return
-        end
+            Config.Menu:Remove()
         
-        OpenWheelMenu(true)
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+                return
+            end
+            
+            OpenWheelMenu(true)
 
-        Config.Menu:RefreshIndex()
-        Config.Menu:MouseControlsEnabled(false);
-        Config.Menu:MouseEdgeEnabled(false);
-        Config.Menu:ControlDisablingEnabled(false);
+            Config.Menu:RefreshIndex()
+            Config.Menu:MouseControlsEnabled(false);
+            Config.Menu:MouseEdgeEnabled(false);
+            Config.Menu:ControlDisablingEnabled(false);
 
-        Config.ModMenu:Visible(not Config.ModMenu:Visible())
+            Config.ModMenu:Visible(not Config.ModMenu:Visible())
 
-        Config.ModMenu.OnMenuClosed = function(menu)
+            Config.ModMenu.OnMenuClosed = function(menu)
+                UpdateVehicleMods(plate, QBCore.Functions.GetVehicleProperties(Config.Vehicle.Vehicle))
+            end
 
-        end
+            Config.InMenu = true
+            FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+            SetVehicleFixed(Config.Vehicle.Vehicle)
+        else 
+            if not owned then
+                QBCore.Functions.Notify("This vehicle is not owned", "error")
+            end
 
-        Config.InMenu = true
-        FreezeEntityPosition(Config.Vehicle.Vehicle, true)
-        SetVehicleFixed(Config.Vehicle.Vehicle)
-    else 
-        --[[ if not AORP.Functions.DoesPlayerOwnVehicle(AORP.Functions.GetPlate(GetVehiclePedIsIn(PlayerPedId()))) then
-            AORP.Functions.Notify("You do not own this vehicle", "error")
-        end ]]
-
-		if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-			Config.ModMenu:Visible(false)
-		end
-	end    
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+            end
+        end 
+    end, plate)   
 end)
 
 RegisterCommand('respray', function()
@@ -147,44 +162,53 @@ end)
 
 RegisterNetEvent('lscustoms:open-respray', function(admin)
     Config.AdminMode = admin or false
+    local player = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(player)
+    local plate = QBCore.Functions.GetPlate(vehicle)
 
-    if IsPedInAnyVehicle(PlayerPedId()) --[[and (admin or player owned check)]] then
-        Config.Vehicle.Vehicle = GetVehiclePedIsIn(PlayerPedId())
-        Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
+    QBCore.Functions.TriggerCallback('lscustoms:is-vehicle-owned', function(owned)
+        if IsPedInAnyVehicle(player) and (admin or owned) then
+            Config.Vehicle.Vehicle = GetVehiclePedIsIn(player)
+            Config.Vehicle.Mods = Config.GetVehicleProperties(Config.Vehicle.Vehicle)
 
-        Config.Menu:Remove()
-    
-        if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-            Config.ModMenu:Visible(false)
-            return
-        end
+            Config.Menu:Remove()
         
-        OpenResprayMenu(true)
-
-        Config.Menu:RefreshIndex()
-        Config.Menu:MouseControlsEnabled(false);
-        Config.Menu:MouseEdgeEnabled(false);
-        Config.Menu:ControlDisablingEnabled(false);
-
-        Config.ModMenu:Visible(not Config.ModMenu:Visible())
-
-        Config.ModMenu.OnMenuClosed = function(menu)
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+                return
+            end
             
+            OpenResprayMenu(true)
+
+            Config.Menu:RefreshIndex()
+            Config.Menu:MouseControlsEnabled(false);
+            Config.Menu:MouseEdgeEnabled(false);
+            Config.Menu:ControlDisablingEnabled(false);
+
+            Config.ModMenu:Visible(not Config.ModMenu:Visible())
+
+            Config.ModMenu.OnMenuClosed = function(menu)
+                UpdateVehicleMods(plate, QBCore.Functions.GetVehicleProperties(Config.Vehicle.Vehicle))
+            end
+
+            Config.InMenu = true
+            FreezeEntityPosition(Config.Vehicle.Vehicle, true)
+            SetVehicleFixed(Config.Vehicle.Vehicle)
+        else 
+            if not owned then
+                QBCore.Functions.Notify("This vehicle is not owned", "error")
+            end
+
+            if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
+                Config.ModMenu:Visible(false)
+            end
         end
-
-        Config.InMenu = true
-        FreezeEntityPosition(Config.Vehicle.Vehicle, true)
-        SetVehicleFixed(Config.Vehicle.Vehicle)
-    else 
-        --[[ if not AORP.Functions.DoesPlayerOwnVehicle(AORP.Functions.GetPlate(GetVehiclePedIsIn(PlayerPedId()))) then
-            AORP.Functions.Notify("You do not own this vehicle", "error")
-        end ]]
-
-		if Config.ModMenu ~= nil and Config.ModMenu:Visible() then
-			Config.ModMenu:Visible(false)
-		end
-	end
+    end, plate)
 end)
+
+function UpdateVehicleMods(plate, props)
+    TriggerServerEvent('lscustoms:update-mods', plate, props)
+end
 
 function OpenResprayMenu(standalone)
     if standalone then
@@ -286,49 +310,52 @@ function LoadPaintTypes(menu)
                     end
 
                     Config.Categories[num][category].OnItemSelect = function(menu, item, index)
-                        if Config.AdminMode or AORP.Functions.CanPurchase(item.Price) then
+                        
+                        QBCore.Functions.TriggerCallback('lscustoms:can-purchase', function(bool)
+                            if Config.AdminMode or bool then
 
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-
-                            for key, value in pairs(menu.Items) do
-                                value:RightLabel('')
-                            end
-                            item:RightLabel('[X]')
-
-                            if num == 53 then
-                                if category == 2 and item.Index ~= Config.Vehicle.Mods.pearlescentColor then
-                                    Config.Vehicle.Mods.pearlescentColor = item.Index
-
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
+    
+                                for key, value in pairs(menu.Items) do
+                                    value:RightLabel('')
+                                end
+                                item:RightLabel('[X]')
+    
+                                if num == 53 then
+                                    if category == 2 and item.Index ~= Config.Vehicle.Mods.pearlescentColor then
+                                        Config.Vehicle.Mods.pearlescentColor = item.Index
+    
+                                        Config.Vehicle.ChangedMod = true
+                                    elseif item.Index ~= Config.Vehicle.Mods.color1 then
+                                        Config.Vehicle.Mods.color1 = item.Index
+    
+                                        Config.Vehicle.ChangedMod = true
+                                    end
+                                elseif num == 54 and item.Index ~= Config.Vehicle.Mods.color2 then
+                                    Config.Vehicle.Mods.color2 = item.Index
+    
                                     Config.Vehicle.ChangedMod = true
-                                elseif item.Index ~= Config.Vehicle.Mods.color1 then
-                                    Config.Vehicle.Mods.color1 = item.Index
-
+                                elseif num == 56 then
+                                    if category == 6 and item.Index ~= Config.Vehicle.Mods.interiorColor then
+                                        Config.Vehicle.Mods.interiorColor = item.Index
+    
+                                        Config.Vehicle.ChangedMod = true
+                                    elseif category == 7 and item.Index ~= Config.Vehicle.Mods.dashboardColor then
+                                        Config.Vehicle.Mods.dashboardColor = item.Index
+    
+                                        Config.Vehicle.ChangedMod = true
+                                    end
+                                elseif num == 57 and item.Index ~= Config.Vehicle.Mods.wheelColor then
+                                    Config.Vehicle.Mods.wheelColor = item.Index
+                                    
                                     Config.Vehicle.ChangedMod = true
                                 end
-                            elseif num == 54 and item.Index ~= Config.Vehicle.Mods.color2 then
-                                Config.Vehicle.Mods.color2 = item.Index
-
-                                Config.Vehicle.ChangedMod = true
-                            elseif num == 56 then
-                                if category == 6 and item.Index ~= Config.Vehicle.Mods.interiorColor then
-                                    Config.Vehicle.Mods.interiorColor = item.Index
-
-                                    Config.Vehicle.ChangedMod = true
-                                elseif category == 7 and item.Index ~= Config.Vehicle.Mods.dashboardColor then
-                                    Config.Vehicle.Mods.dashboardColor = item.Index
-
-                                    Config.Vehicle.ChangedMod = true
-                                end
-                            elseif num == 57 and item.Index ~= Config.Vehicle.Mods.wheelColor then
-                                Config.Vehicle.Mods.wheelColor = item.Index
-                                
-                                Config.Vehicle.ChangedMod = true
                             end
-                        end
+                        end, item.Price)
                     end
 
                     Config.Categories[num][category].OnMenuChanged = function(menu, newmenu, forward)
@@ -620,140 +647,143 @@ function OpenModMenu()
                 end 
                 item:RightLabel('[X]')
 
-                if category == 22 then 
-                    if Config.Vehicle.Mods.currentMods[category] == IsToggleModOn(Config.Vehicle.Vehicle, category) then
-                        if Config.Vehicle.Mods.xenonColor ~= GetVehicleXenonLightsColour(Config.Vehicle.Vehicle)then
-                            if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                                Config.Vehicle.Mods.xenonColor = GetVehicleXenonLightsColour(Config.Vehicle.Vehicle)
-                                Config.Vehicle.ChangedMod = true
-                            
-                                UpdateMod(category, index)
-
-                                if not Config.AdminMode then
-                                    AORP.Functions.Notify("Upgrade purchased", "success")
+                QBCore.Functions.TriggerCallback('lscustoms:can-purchase', function(bool)
+                    if category == 22 then 
+                        if Config.Vehicle.Mods.currentMods[category] == IsToggleModOn(Config.Vehicle.Vehicle, category) then
+                            if Config.Vehicle.Mods.xenonColor ~= GetVehicleXenonLightsColour(Config.Vehicle.Vehicle)then
+                                if Config.AdminMode or bool then
+                                    Config.Vehicle.Mods.xenonColor = GetVehicleXenonLightsColour(Config.Vehicle.Vehicle)
+                                    Config.Vehicle.ChangedMod = true
+                                
+                                    UpdateMod(category, index)
+    
+                                    if not Config.AdminMode then
+                                        QBCore.Functions.Notify("Upgrade purchased", "success")
+                                    else
+                                        QBCore.Functions.Notify("Upgrade applied", "success")
+                                    end
                                 else
-                                    AORP.Functions.Notify("Upgrade applied", "success")
+                                    QBCore.Functions.Notify("Unable to make purchase", "error")
+                                end
+                            end
+                        else
+                            if Config.AdminMode or bool then
+                                Config.Vehicle.Mods.currentMods[category] = IsToggleModOn(Config.Vehicle.Vehicle, category)
+                                Config.Vehicle.ChangedMod = true
+                                
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
                                 end
                             else
-                                AORP.Functions.Notify("Unable to make purchase", "error")
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
+                            end
+                        end 
+                    elseif category == 50 then
+                        if Config.AdminMode or bool then
+                            if Config.Vehicle.Mods.plateIndex ~= GetVehicleNumberPlateTextIndex(Config.Vehicle.Vehicle) then
+                                Config.Vehicle.Mods.plateIndex = GetVehicleNumberPlateTextIndex(Config.Vehicle.Vehicle)
+                                Config.Vehicle.ChangedMod = true
+                                
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
+                            else
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
+                            end
+                        end
+                    elseif category == 51 then
+                        if 
+                            Config.Vehicle.Mods.neonEnabled[1] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 0) and true or
+                            Config.Vehicle.Mods.neonEnabled[2] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 1) and true or
+                            Config.Vehicle.Mods.neonEnabled[3] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 2) and true or
+                            Config.Vehicle.Mods.neonEnabled[4] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 3) and true
+                        then
+                            if Config.AdminMode or bool then
+                                Config.Vehicle.Mods.neonEnabled = {
+                                    IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 0) and true,
+                                    IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 1) and true,
+                                    IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 2) and true,
+                                    IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 3) and true
+                                }
+                                Config.Vehicle.ChangedMod = true
+    
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
+                            else
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
+                            end
+                        end
+                    elseif category == 52 then
+                        if 
+                            Config.Vehicle.Mods.neonColor[1] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[1] or
+                            Config.Vehicle.Mods.neonColor[2] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[2] or
+                            Config.Vehicle.Mods.neonColor[3] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[3]
+                        then
+                            if Config.AdminMode or bool then
+                                Config.Vehicle.Mods.neonColor = table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))
+                                Config.Vehicle.ChangedMod = true
+                                
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
+                            else
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
+                            end
+                        end
+                    elseif category == 55 then
+                        if Config.Vehicle.Mods.windowTint ~= GetVehicleWindowTint(Config.Vehicle.Vehicle) then
+                            if Config.AdminMode or bool then
+                                Config.Vehicle.Mods.windowTint = GetVehicleWindowTint(Config.Vehicle.Vehicle)
+                                Config.Vehicle.ChangedMod = true
+                                
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
+                            else
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
                             end
                         end
                     else
-                        if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                            Config.Vehicle.Mods.currentMods[category] = IsToggleModOn(Config.Vehicle.Vehicle, category)
-                            Config.Vehicle.ChangedMod = true
-                            
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
+                        if Config.Vehicle.Mods.currentMods[category] ~= Config.Vehicle.Mods.modList[category][index].index then
+                            if Config.AdminMode or bool then
+                                Config.Vehicle.Mods.currentMods[category] = Config.Vehicle.Mods.modList[category][index].index
+                                Config.Vehicle.ChangedMod = true
+                                
+                                UpdateMod(category, index)
+    
+                                if not Config.AdminMode then
+                                    QBCore.Functions.Notify("Upgrade purchased", "success")
+                                else
+                                    QBCore.Functions.Notify("Upgrade applied", "success")
+                                end
                             else
-                                AORP.Functions.Notify("Upgrade applied", "success")
+                                QBCore.Functions.Notify("Unable to make purchase", "error")
                             end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
-                        end
-                    end 
-                elseif category == 50 then
-                    if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                        if Config.Vehicle.Mods.plateIndex ~= GetVehicleNumberPlateTextIndex(Config.Vehicle.Vehicle) then
-                            Config.Vehicle.Mods.plateIndex = GetVehicleNumberPlateTextIndex(Config.Vehicle.Vehicle)
-                            Config.Vehicle.ChangedMod = true
-                            
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
                         end
                     end
-                elseif category == 51 then
-                    if 
-                        Config.Vehicle.Mods.neonEnabled[1] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 0) and true or
-                        Config.Vehicle.Mods.neonEnabled[2] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 1) and true or
-                        Config.Vehicle.Mods.neonEnabled[3] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 2) and true or
-                        Config.Vehicle.Mods.neonEnabled[4] ~= IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 3) and true
-                    then
-                        if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                            Config.Vehicle.Mods.neonEnabled = {
-                                IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 0) and true,
-                                IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 1) and true,
-                                IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 2) and true,
-                                IsVehicleNeonLightEnabled(Config.Vehicle.Vehicle, 3) and true
-                            }
-                            Config.Vehicle.ChangedMod = true
-
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
-                        end
-                    end
-                elseif category == 52 then
-                    if 
-                        Config.Vehicle.Mods.neonColor[1] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[1] or
-                        Config.Vehicle.Mods.neonColor[2] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[2] or
-                        Config.Vehicle.Mods.neonColor[3] ~= table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))[3]
-                    then
-                        if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                            Config.Vehicle.Mods.neonColor = table.pack(GetVehicleNeonLightsColour(Config.Vehicle.Vehicle))
-                            Config.Vehicle.ChangedMod = true
-                            
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
-                        end
-                    end
-                elseif category == 55 then
-                    if Config.Vehicle.Mods.windowTint ~= GetVehicleWindowTint(Config.Vehicle.Vehicle) then
-                        if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                            Config.Vehicle.Mods.windowTint = GetVehicleWindowTint(Config.Vehicle.Vehicle)
-                            Config.Vehicle.ChangedMod = true
-                            
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
-                        end
-                    end
-                else
-                    if Config.Vehicle.Mods.currentMods[category] ~= Config.Vehicle.Mods.modList[category][index].index then
-                        if Config.AdminMode or AORP.Functions.CanPurchase(Config.Vehicle.Mods.modList[category][index].price) then
-                            Config.Vehicle.Mods.currentMods[category] = Config.Vehicle.Mods.modList[category][index].index
-                            Config.Vehicle.ChangedMod = true
-                            
-                            UpdateMod(category, index)
-
-                            if not Config.AdminMode then
-                                AORP.Functions.Notify("Upgrade purchased", "success")
-                            else
-                                AORP.Functions.Notify("Upgrade applied", "success")
-                            end
-                        else
-                            AORP.Functions.Notify("Unable to make purchase", "error")
-                        end
-                    end
-                end
+                end, Config.Vehicle.Mods.modList[category][index].price)
+                
             end
 
             newmenu.OnMenuChanged = function(menu, newmenu, forward)
