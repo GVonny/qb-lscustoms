@@ -30,6 +30,9 @@ Note: Each event takes in a boolean parameter (admin)
 - When in admin mode when you select a category or mod it it will print to the console the details of that category or mod
   - `{model}` `{category number}`: `{mod index}` `{mod label key}` `{carcols category}`
 
+## Dependencies
+[NativeUI](https://github.com/FrazzIe/NativeUILua)
+
 ## Configs
 **init.lua** - _The starting variables for the script_
 ---
