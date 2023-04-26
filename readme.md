@@ -45,7 +45,7 @@ Config.Mods: defines most mods that aren't physical
 
 **categories.lua** - _Where to define custom categories for each vehicle_
 ---
-Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower()``` feel free to add any vehicle here
+Using ```GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: it is advised to not modify Config.DefaultColors or Config.VmtCategories, feel free to modify any category within Config.DefaultCategories
 
@@ -74,7 +74,7 @@ There are two options here
 
 **labels.lua** - _Where to add/override any mod label_
 ---
-Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
+Using ```GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: this will override anything provided in names.lua
 
@@ -93,7 +93,7 @@ Config.Prices defines the global price for each category that differs from the g
 
 Config.CustomPrices defines the overrides for any previously defined prices
 
-Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
+Using ```GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: this will override anything defined in Config.Prices or the global Config.DefaultPrice
 
@@ -104,7 +104,7 @@ Each model then has it's own list of prices where you can define the price to be
 
 **blacklist.lua** - _Where to define individual mods or whole categories to be blacklisted_
 ---
-Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
+Using ```GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 
 Each model then has it's own blacklist where you can define the mod or whole category to block
@@ -120,7 +120,7 @@ _I've already done all the base game vehicles so you'll likely only need to add 
 ---
 Config.Doors defines the presets to be used depending on which doors need to be opened when selecting a category
 
-Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
+Using ```GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 
 Each model then has it's own door list where you can define the doors preset to open when modifying certain categories
