@@ -10,6 +10,7 @@ This menu is designed to be completely configurable of which includes:
 
 This menu is up to date with game build version 2802
 - Includes all chameleon paints
+  - Follow the beginning of this guide to stream all the chameleon paints: [GITHUB](https://forum.cfx.re/t/how-to-get-the-chameleon-paints/4869883)
 - Includes new track wheel set
 
 ## Events
@@ -32,7 +33,7 @@ Note: Each event takes in a boolean parameter (admin)
 ---
 Config.Debug: defines whether or not to print the mod details in the console when cycling through each option
 - With Config.Debug enabled when you select a category it it will print to the console the details of that category
-  - {model} {category number}: {mod index} {mod label key} {carcols category}
+  - `{model}` `{category number}`: `{mod index}` `{mod label key}` `{carcols category}`
 
 Config.AllowBlacklised: defines whether or not to allow all blacklisted mods in blacklist.lua to show in the listing
 
@@ -44,14 +45,14 @@ Config.Mods: defines most mods that aren't physical
 
 **categories.lua** - _Where to define custom categories for each vehicle_
 ---
-Using GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower() feel free to add any vehicle here
+Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: it is advised to not modify Config.DefaultColors or Config.VmtCategories, feel free to modify any category within Config.DefaultCategories
 
 Each model then has it's own list of categories where you can define the label to be used for that category
 
-- From the details printed in debug mode use the {model} to create the table subset for the vehicle
-- Then using the {category number} set the desired label for that category
+- From the details printed in debug mode use the `{model}` to create the table subset for the vehicle
+- Then using the `{category number}` set the desired label for that category
 
 _I've already done all the base game vehicles so you'll likely only need to add your imports_
 
@@ -65,7 +66,7 @@ Once you have the vehicle mod open in OpenIV follow these steps:
 
 There are two options here
 
-1. Copy each line into the file using the native AddTextEntry({hash}, {label}) (not recommended)
+1. Copy each line into the file using the native AddTextEntry(`{hash}`, `{label}`) (not recommended)
 2. There is a tool out there where you can take the whole contents of the global.gtx2 file and have it auto generate AddTextEntry() values
     * That tool can be found here: [GITHUB](https://github.com/Starystars67/FiveM-names.lua-Maker/releases)
     * Just copy the content from the global.gtx2 into the gtx2.txt file and run the exe
@@ -73,14 +74,14 @@ There are two options here
 
 **labels.lua** - _Where to add/override any mod label_
 ---
-Using GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower() feel free to add any vehicle here
+Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: this will override anything provided in names.lua
 
 Each model then has it's own list of labels where you can define/override the label to be used for that mod
 
-- From the details printed in debug mode use the {model} to create the table subset for the vehicle
-- Then using the {mod label key} set the desired label for that mod
+- From the details printed in debug mode use the `{model}` to create the table subset for the vehicle
+- Then using the `{mod label key}` set the desired label for that mod
 
 _I've already done all the base game vehicles so you'll likely only need to add your imports_
 
@@ -92,26 +93,26 @@ Config.Prices defines the global price for each category that differs from the g
 
 Config.CustomPrices defines the overrides for any previously defined prices
 
-Using GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower() feel free to add any vehicle here
+Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 - Note: this will override anything defined in Config.Prices or the global Config.DefaultPrice
 
 Each model then has it's own list of prices where you can define the price to be used for that category
 
-- From the details printed in debug mode use the {model} to create the table subset for the vehicle
-- Then using the {category number} set the desired price for that category
+- From the details printed in debug mode use the `{model}` to create the table subset for the vehicle
+- Then using the `{category number}` set the desired price for that category
 
 **blacklist.lua** - _Where to define individual mods or whole categories to be blacklisted_
 ---
-Using GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower() feel free to add any vehicle here
+Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 
 Each model then has it's own blacklist where you can define the mod or whole category to block
 
-- From the details printed in debug mode use the {model} to create the table subset for the vehicle
-- Then using the {category number} set the desired category to be blocked as a table
+- From the details printed in debug mode use the `{model}` to create the table subset for the vehicle
+- Then using the `{category number}` set the desired category to be blocked as a table
   - With the table empty that will blacklist the whole category
-  - Using the {mod index} you can add any index to the table to blacklist any individual mod in that category
+  - Using the `{mod index}` you can add any index to the table to blacklist any individual mod in that category
 
 _I've already done all the base game vehicles so you'll likely only need to add your imports, but feel free to modify any existing blacklist_
 
@@ -119,12 +120,12 @@ _I've already done all the base game vehicles so you'll likely only need to add 
 ---
 Config.Doors defines the presets to be used depending on which doors need to be opened when selecting a category
 
-Using GetDisplayNameFromVehicleModel(GetEntityModel(_{vehicle}_)):lower() feel free to add any vehicle here
+Using ```luaGetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()``` feel free to add any vehicle here
 - Note: when adding import vehicles be sure to change the *gameName* in the vehicles.meta to something that will be used here, this is what the native above returns
 
 Each model then has it's own door list where you can define the doors preset to open when modifying certain categories
 
-- From the details printed in debug mode use the {model} to create the table subset for the vehicle
-- Then using the {category number} set the desired preset from Config.Doors for that category
+- From the details printed in debug mode use the `{model}` to create the table subset for the vehicle
+- Then using the `{category number}` set the desired preset from Config.Doors for that category
 
 _I've already done all the base game vehicles so you'll likely only need to add your imports_
